@@ -11,11 +11,17 @@ import javafx.geometry.Insets;
 public class GameScreen {
 
     int maxAttempts = 5;
-
-    /* temporary word, replace with API */
-        String wordle = "ghoul";
+    String wordle;
 
     public Scene getScene(Stage stage, int wordLength, Scene mainScreen) {
+
+        try {
+            wordle = WordnikAPI.getRandomWord(wordLength);
+            System.out.println("Chosen word: " + wordle);
+        } catch (Exception ex) {
+             wordle = "error"; // fallback if API fails
+            System.out.println("Error fetching word: " + ex.getMessage());
+        }
 
         Label lengthLabel = new Label("Word Length: " + wordLength);
 
@@ -38,7 +44,7 @@ public class GameScreen {
         for (int row = 0; row < maxAttempts; row++) {
             for (int col = 0; col < wordLength; col++) {
                 TextField guessField = new TextField();
-                guessField.setStyle("-fx-border-color: blue; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px;");
+                guessField.setStyle("-fx-background-color: lightgray; -fx-border-color: blue; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px;");
                 guessField.setPrefWidth(40);
                 guessField.setPrefColumnCount(1);
                 guessFields[row][col] = guessField;
@@ -77,8 +83,9 @@ public class GameScreen {
         submitGuess.setOnAction(e -> {
             if (currentAttempt[0] >= maxAttempts) {
                 statusLabel.setText("No more attempts!");
+                restartButton.setDisable(false);
                 return;
-            }
+            } 
 
             StringBuilder guessBuilder = new StringBuilder();
             for (int col = 0; col < wordLength; col++) {
@@ -97,7 +104,7 @@ public class GameScreen {
                 statusLabel.setText("You guess it!");
                 submitGuess.setDisable(true);
                 restartButton.setDisable(false);
-                return;
+                //return;
             }
 
             //Each character in the attempted guess must be checked
@@ -105,12 +112,17 @@ public class GameScreen {
                 
                 char c = guess.charAt(guessIndex);
 
+                TextField field = guessFields[currentAttempt[0]][guessIndex];
+
                 if (c == wordle.charAt(guessIndex)) {
                    System.out.println(c + " is in the right location.");
+                   field.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-color: #4CAF50; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px;");
                 } else if (wordle.indexOf(c) >= 0) {
                     System.out.println(c + " is in the wrong location.");
+                    field.setStyle("-fx-background-color: #FFEB3B; -fx-text-fill: black; -fx-border-color: #FFEB3B; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px;");
                 } else {                       
                     System.out.println(c + " is not included.");
+                    field.setStyle("-fx-background-color: lightgray; -fx-text-fill: black; -fx-border-color: blue; -fx-border-width: 1px; -fx-background-radius: 10px; -fx-border-radius: 10px;");
                 }
             }
             currentAttempt[0]++;
@@ -119,37 +131,7 @@ public class GameScreen {
         VBox root = new VBox(20, lengthLabel, guessInstruction, guessGrid, statusLabel, submitGuess, restartButton);
         root.setAlignment(Pos.CENTER);
 
-        return new Scene(root, 700, 700);
+        return new Scene(root, 600, 600);
     }
 }
 
-
-
-/* //User has five total attemps to guess the wordle correctly. 
-        for(int attempt = 1; attempt <= maxAttempts; attempt++) {
-            Label guessIntruction = new Label("Guess " + attempt + " out of 5");
-            String guess = TextField guessField = new TextField();
-            Button submitGuess = new Button("Submit");
-            
-            //check that if guess is equal to wordle
-            if (wordle.equals(guess)) {
-                System.out.println("You got it!");
-                keyboard.close();
-                break;
-            }
-
-            //Each character in the attempted guess must be checked
-            for (int guessIndex = 0; guessIndex < wordLength; guessIndex++) {
-                
-                char c = guess.charAt(guessIndex);
-
-                if (c == wordle.charAt(guessIndex)) {
-                    System.out.println(c + " is in the right location.");
-                } else if (wordle.indexOf(c) >= 0) {
-                    System.out.println(c + " is in the wrong location.");
-                } else {
-                    System.out.println(c + " is not included.");
-                }
-
-            }
-        } */

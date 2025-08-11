@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "WordnikAPI",
+            "request": "launch",
+            "mainClass": "WordnikAPI",
+            "projectName": "wordle++_4512dd79"
+        },
+        {
+            "type": "java",
             "name": "gameScreen",
             "request": "launch",
             "mainClass": "gameScreen",

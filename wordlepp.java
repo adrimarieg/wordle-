@@ -30,8 +30,8 @@ public class wordlepp extends Application {
 
         Label introText = new Label(
             "We all love our daily NYTimes Wordle, but why only play once a day?\n" +
-            "Wordl*++ allows you to challenge yourself by selecting your word length\n" +
-            "and allows you to play as many times as you'd like in a day!"
+            "Wordl++ not only allows you to play as much as you'd like, \n" +
+            "but also take your skill up a notch by selecting your word length!"
         );
 
         introText.setWrapText(true); 
@@ -71,14 +71,14 @@ public class wordlepp extends Application {
         wordLengthVbox.setAlignment(Pos.CENTER);
 
         /**** Window's title ****/
-        primaryStage.setTitle("Wordl*++");
+        primaryStage.setTitle("Wordl++");
 
         /**** SCENE/STAGE VBOX ****/
         VBox root = new VBox(50, logoView, introText, wordLengthVbox, startButton, disclaimer);
         root.setAlignment(Pos.CENTER);
 
         //Set Scene size
-        Scene mainScreen = new Scene(root, 700, 700);
+        Scene mainScreen = new Scene(root, 600, 600);
         primaryStage.setScene(mainScreen);
 
         /**** ACTION HANDLERS ****/
